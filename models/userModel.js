@@ -1,0 +1,109 @@
+const mongoose = require('mongoose');
+const { isEmail } = require('validator');
+const bcrypt = require('bcrypt')
+
+const userSchema = new mongoose.Schema({
+    firstname: {
+        type: String,
+        required: [true, 'Please enter a Last Name'],
+        lowercase: true
+    },
+    lastname: {
+        type: String,
+        required: [true, 'Please enter a First name'],
+        lowercase: true
+    },
+    username: {
+        type: String,
+        required: [true, 'Please enter a username'],
+        lowercase: true
+    },
+    email: {
+        type: String,
+        required: [true, "Please enter an email"],
+        lowercase: true,
+        unique: [true, "Email already exists"],
+        validate: [isEmail, "Please Enter a Valid Email"]
+    },
+    password: {
+        type: String,
+        required: [true, 'Please enter a password'],
+        minLength: [6, "Minimum Password length is 6"]
+    },
+    user_role: {
+        type: String,
+        enum: ['subscriber', 'contestant', 'editor', 'admin'],
+        required: [true, 'User Role not set']
+    },
+    location: {
+        type: String,
+    },
+    phone_number: {
+        type: String,
+    },
+    gender: {
+        enum: ['male', 'female'],
+        type: String,
+    },
+    bio: {
+        type: String,
+    },
+    my_stats: {
+        total_points: {
+            type: Number
+        },
+        total_attempts: {
+            type: Number
+        },
+        wallet_balance: {
+            type: Number
+        },
+        amount_spent: {
+            type: Number
+        },
+        total_votes: {
+            type: Number
+        },
+    },
+    subscriber_stats: {
+        wallet_balance: {
+            type: Number
+        },
+        amount_spent: {
+            type: Number
+        },
+        total_votes: {
+            type: Number
+        },
+        contestants_voted_for: {
+            type: [{id: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, username: String}]
+        },
+    }
+}, {timestamps: true})
+
+//Fire a function before a user is saved to the database
+// Hashing the password
+userSchema.pre('save', async function(next){
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+next()
+})
+
+//Fire a function after a user has been saved to the database
+//Function to login user
+userSchema.statics.login = async function(email, password){
+    const user = await this.findOne({email})
+    if(user){
+        const auth = await bcrypt.compare(password, user.password)
+        if(auth){
+            return user
+        }
+        throw Error("Incorrect Password")
+    }
+    throw Error("Incorrect Email")
+}
+
+
+
+const User = mongoose.model('User', userSchema);
+module.exports = User;
