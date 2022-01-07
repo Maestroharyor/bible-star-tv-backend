@@ -4,15 +4,9 @@ const userController = require('../../controllers/userController');
 const {tokenVerify} = require('../../middlewares/tokenVerify');
 
 
-router.get('/brands', userController.get_brands)
+router.get("/all", userController.get_users)
 
-router.get('/palettes', userController.get_palettes)
-
-router.get('/gradients', userController.get_gradients)
-
-router.get('/fonts', userController.get_fonts)
-
-router.get('/:id', userController.get_user)
+router.get('/:id', userController.get_single_user)
 
 router.put('/:id', userController.update_user)
 

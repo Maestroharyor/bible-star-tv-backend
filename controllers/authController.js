@@ -1,15 +1,15 @@
 const User = require('../models/userModel');
-const PassReset = require('../models/passResetModel');
+// const PassReset = require('../models/passResetModel');
 const jwt = require('jsonwebtoken');
 const { v4 } = require('uuid');
-const {sendEmail} = require('../mail/main')
+// const {sendEmail} = require('../mail/main')
 const moment = require('moment');
 
 
 const maxAge = 3 * 24 * 60 * 60
 
 const createToken = id =>{
-    return jwt.sign({id}, 'braandly@maestroJoshAd21!!!', {
+    return jwt.sign({id}, 'Fovero21biblestar', {
         expiresIn: maxAge
     })
 }
@@ -42,36 +42,38 @@ const handleError = err => {
 
 
 const auth_signup = (req, res) => {
-    const {username, email, password} = req.body
-    let plan, user_role;
-    const current_date = moment().format('YYYY-MM-DD')
-    // const expires_date = moment(current_date).add(1, 'y').format('YYYY-MM-DD')
-    // console.log({current_date, expires_date})
-    // `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + date.getDate()).slice(-2)}`
-    if(!req.body.plan){
-        plan = {
-            name: "Hobby",
-            pricing_model: "yearly",
-            created: current_date
+    const {firstname, lastname, username, email, password} = req.body
+    const current_date = moment().format('YYYY-MM-DD');
+    let my_stats;
+    user_role = req.body.user_role ? req.body.user_role : "contestant";
+
+    if(user_role === "contestant" && !req.body.my_stats){
+        my_stats = {
+            total_points:0,
+            total_attempts:0,
+            wallet_balance:0,
+            amount_spent:0,
+            total_votes:0,
         }
     } else{
-        plan = plan
+        my_stats = req.body.my_stats
     }
-    user_role = req.body.user_role ? req.body.user_role : "subscriber";
 
-    User.create({username, email, password, user_role, plan})
+    User.create({firstname, lastname, username, email, password, user_role, my_stats})
     .then(response => {
         const token = createToken(response._id)
         res.cookie('b_jt', token, {httpOnly: true, maxAge: maxAge})
         res.status(201).json({
-            id: response._id,
-            username: response.username,
-            email: response.email,
-            user_role: response.user_role,
-            plan: {name: response.plan.name,
-                pricing_model: response.plan.pricing_model,
-                created: response.plan.created
-            }})
+          id: response._id,
+          username: response.username,
+          email: response.email,
+          user_role: response.user_role,
+          my_stats:
+            response.user_role === "contestant"
+              ? response.my_stats
+              : response.subscriber_stats,
+          token,
+        });
         // res.status(201).json(response)
     })
     .catch(err=> {
@@ -90,7 +92,7 @@ const auth_login = (req, res) => {
             username: response.username,
             email: response.email,
             user_role: response.user_role,
-            plan_name: response.plan.name
+            token,
         })
     })
     .catch(err =>{
@@ -136,18 +138,6 @@ const auth_password_reset = async (req, res) => {
         req.json({error: 'Failed to generate reset link, please try again'})
     })
 
-    // User.findOne({email})
-    // .then(response =>{
-    //     // res.send(response)
-    //     if(response){
-    //         res.send("Got it")
-    //     } else{
-    //         res.status(400).json({errors: {email: "Email does not exist"}})
-    //     }
-    // })
-    // .catch(err => {
-    //     res.status(400).send(err)
-    // })
 }
 
 const auth_password_reset_token = async (req, res) => {
