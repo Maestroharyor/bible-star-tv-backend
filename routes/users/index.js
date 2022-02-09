@@ -4,7 +4,7 @@ const userController = require('../../controllers/userController');
 const {tokenVerify} = require('../../middlewares/tokenVerify');
 
 
-router.get("/all", userController.get_users)
+router.get("/", userController.get_users)
 
 router.get('/:id', userController.get_single_user)
 

@@ -10,11 +10,12 @@ const blogSchema = new Schema(
     },
     excerpt: {
       type: String,
-      required: [true, "Excerpt not added"],
+      // required: [true, "Excerpt not added"],
     },
     category: {
       type: [String],
       required: [true, "Category Not Added"],
+      unique: [true, "Duplicate Category Added"]
     },
     featured_image: {
       type: String,
@@ -24,10 +25,10 @@ const blogSchema = new Schema(
       required: [true, "Blog body empty"],
     },
     created_by: {
-      type: {
         id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        username: String,
-      },
+        firstname: String,
+        lastname: String,
+        email: String
     },
   },
   { timestamps: true }

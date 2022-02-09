@@ -1,40 +1,44 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+// const axios = require('axios');
+const dotenv = require('dotenv/config');
 const routes = require('./routes/api');
-const {braandlySeeder} = require('./middlewares/seeding');
-const User = require('./models/userModel');
-// const users = require('./data/brands/seedData.json')
-const faker = require('faker');
+// const {braandlySeeder} = require('./middlewares/seeding');
+// const User = require('./models/userModel');
+// const {user_seed_data} = require('./data/user_data');
+// const Audition = require('./models/auditionModel');
+// const {questionFetchQuestion} = require('./data/audition_data');
+// const Blog = require('./models/blogModel');
+// const {blogFetch} = require('./data/blog_data');
 
 
-const user_role_types = ['subscriber', 'contestant', 'admin']
+// let audition_seed_data;
+
+// (async function() {
+//   try {
+//     audition_seed_data = await questionFetchQuestion();
+//     braandlySeeder(audition_seed_data, Audition)
+//     console.log({audition_seed_data})
+//   } catch (e) {
+//     return console.log(e);
+//   }
+// })()
+// console.log({audition_seed_data})
 
 
-const seed_data = []
 
-for (let i=0; i<=500; i++){
-  const testData = {
-    firstname:faker.name.firstName(),
-    lastname:faker.name.lastName(),
-    username: `${faker.name.firstName()}-${faker.name.lastName()}`,
-    password: "123456",
-    email: faker.internet.email(),
-    user_role: user_role_types[Math.ceil(Math.random() * user_role_types.length) - 1],
-  }
-  if(testData.user_role === "contestant"){
-    testData.my_stats = {
-      total_points:Math.floor(Math.random() * (40 - 0 + 1)) + 0,
-      total_attempts:Math.floor(Math.random() * (15 - 0 + 1)) + 0,
-      wallet_balance:Math.floor(Math.random() * (4000 - 500 + 1)) + 500,
-      amount_spent:Math.floor(Math.random() * (6000 - 500 + 1)) + 500,
-      total_votes:Math.floor(Math.random() * (100 - 10 + 1)) + 10,
-    }
-  }
-  seed_data.push(testData)
-}
+// (async function() {
+//   try {
+//     let blog_seed_data = await blogFetch();
+//     braandlySeeder(blog_seed_data, Blog)
+//     // console.log({blog_seed_data})
+//   } catch (e) {
+//     return console.log(e);
+//   }
+// })()
 
-// console.log(seed_data)
+
 
 const app = express();
 
@@ -57,11 +61,14 @@ res.status(404).send("Error 404")
 
 
 // database connection
-const dbURI = 'mongodb+srv://Fovero:Fovero21biblestar@bible-star-tv.kcjzu.mongodb.net/biblestars?retryWrites=true&w=majority';
+// const dbURI = 'mongodb+srv://Fovero:Fovero21biblestar@bible-star-tv.kcjzu.mongodb.net/biblestars?retryWrites=true&w=majority';
+const dbURI = process.env.DB;
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
   .then((result) => {
     console.log("Connected to db");
-    braandlySeeder(seed_data, User)
+  
+    // console.log({audition_seed_data})
+    // braandlySeeder(audition_seed_data, Audition)
   })
   .catch((err) => console.log(err));
 

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const {Audition} = require("../models/auditionModel")
 
 const userSchema = new mongoose.Schema({
     firstname: {
@@ -32,8 +33,13 @@ const userSchema = new mongoose.Schema({
     },
     user_role: {
         type: String,
-        enum: ['subscriber', 'contestant', 'editor', 'admin'],
+        enum: ['subscriber', 'contestant', 'admin', 'superadmin'],
         required: [true, 'User Role not set']
+    },
+    batch: {
+        type: String,
+        enum: ['A', 'B', 'C', 'D'],
+        // required: [true, 'User Role not set']
     },
     location: {
         type: String,
@@ -75,10 +81,11 @@ const userSchema = new mongoose.Schema({
         total_votes: {
             type: Number
         },
-        contestants_voted_for: {
-            type: [{id: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, username: String}]
-        },
-    }
+        contestants_voted_for: [
+            {id: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, username: String}
+        ],
+    },
+    auditioned_questions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Audition'}],
 }, {timestamps: true})
 
 //Fire a function before a user is saved to the database

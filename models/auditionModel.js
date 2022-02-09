@@ -1,10 +1,17 @@
 const mongoose = require('mongoose');
+const User = require('../models/userModel')
 
 const auditionSchema = new mongoose.Schema({
     question: {
         type: String,
         required: [true, 'Question not set'],
+        unique: [true, "Question already exists"],
         lowercase: true,
+    },
+    book_of_bible: {
+        type: String,
+        required: [true, 'Book of the bible not set'],
+        // unique: [true, "Book of the bible already exists"],
     },
     answers: {
         type: [String],
@@ -14,6 +21,7 @@ const auditionSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Correct Answer not set']
     },
+    created_by:  { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, {timestamps: true})
 
 

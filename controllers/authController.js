@@ -9,7 +9,7 @@ const moment = require('moment');
 const maxAge = 3 * 24 * 60 * 60
 
 const createToken = id =>{
-    return jwt.sign({id}, 'Fovero21biblestar', {
+    return jwt.sign({id}, process.env.JWTSIGN, {
         expiresIn: maxAge
     })
 }
@@ -42,10 +42,11 @@ const handleError = err => {
 
 
 const auth_signup = (req, res) => {
-    const {firstname, lastname, username, email, password} = req.body
+    const {firstname, lastname, username, email, gender, password} = req.body
     const current_date = moment().format('YYYY-MM-DD');
     let my_stats;
-    user_role = req.body.user_role ? req.body.user_role : "contestant";
+    let user_role = req.body.user_role ? req.body.user_role : "contestant";
+    let data;
 
     if(user_role === "contestant" && !req.body.my_stats){
         my_stats = {
@@ -59,7 +60,38 @@ const auth_signup = (req, res) => {
         my_stats = req.body.my_stats
     }
 
-    User.create({firstname, lastname, username, email, password, user_role, my_stats})
+    if(user_role === "contestant"){
+        data = {
+            firstname,
+            lastname,
+            username,
+            email,
+            gender,
+            password,
+            user_role,
+            my_stats,
+            auditioned_question:[] 
+        }
+    } else{
+        data = {
+            firstname,
+            lastname,
+            username,
+            email,
+            gender,
+            password,
+            user_role,
+            subscriber_stats: {
+                wallet_balance: 0,
+                amount_spent: 0,
+                total_votes: 0,
+                contestants_voted_for: []
+            }
+        }
+
+    }
+
+    User.create(data)
     .then(response => {
         const token = createToken(response._id)
         res.cookie('b_jt', token, {httpOnly: true, maxAge: maxAge})
@@ -72,6 +104,7 @@ const auth_signup = (req, res) => {
             response.user_role === "contestant"
               ? response.my_stats
               : response.subscriber_stats,
+          
           token,
         });
         // res.status(201).json(response)
@@ -91,6 +124,10 @@ const auth_login = (req, res) => {
             id: response._id,
             username: response.username,
             email: response.email,
+            my_stats:
+            response.user_role === "contestant"
+              ? response.my_stats
+              : response.subscriber_stats,
             user_role: response.user_role,
             token,
         })
