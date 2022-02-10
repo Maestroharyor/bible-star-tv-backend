@@ -4,7 +4,7 @@ const faker = require('faker');
 const user_role_types = ['subscriber', 'contestant', 'admin', 'superadmin']
 const batch_types = ['A', 'B', 'C', 'D']
 
-const seed_data = []
+const user_seed_data = []
 
 for (let i=0; i<=500; i++){
   const testData = {
@@ -25,7 +25,7 @@ for (let i=0; i<=500; i++){
       total_votes:Math.floor(Math.random() * (100 - 10 + 1)) + 10,
     }
   }
-  seed_data.push(testData)
+  user_seed_data.push(testData)
 }
 
-module.exports.seed_data
+module.exports.user_seed_data

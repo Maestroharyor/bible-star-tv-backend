@@ -48,8 +48,8 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
     console.log("Connected to db");
   
     // console.log({audition_seed_data})
-    // braandlySeeder(user_seed_data, Audition)
-    braandlySeeder(user_seed_data, User)
+    // console.log(user_seed_data)
+    // braandlySeeder(user_seed_data, User)
 
     let audition_seed_data;
 
@@ -62,7 +62,7 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
     return console.log(e);
   }
 })()
-console.log({audition_seed_data})
+// console.log({audition_seed_data})
 
 
 
