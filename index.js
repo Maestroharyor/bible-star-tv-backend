@@ -37,9 +37,8 @@ app.use("*", (req, res) => {
 });
 
 // database connection
-const dbURI =
-  "mongodb+srv://Fovero:Fovero21biblestar@bible-star-tv.kcjzu.mongodb.net/biblestars?retryWrites=true&w=majority";
-// const dbURI = process.env.DB;
+// const dbURI = "mongodb+srv://Fovero:Fovero21biblestar@bible-star-tv.kcjzu.mongodb.net/biblestars?retryWrites=true&w=majority";
+const dbURI = process.env.DB;
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => {
@@ -48,30 +47,30 @@ mongoose
 
     // console.log({audition_seed_data})
     // console.log({user_seed_data})
-    braandlySeeder(user_seed_data, User)
+    // braandlySeeder(user_seed_data, User)
 
-        let audition_seed_data;
+    //     let audition_seed_data;
 
-    (async function() {
-      try {
-        audition_seed_data = await questionFetchQuestion();
-        braandlySeeder(audition_seed_data, Audition)
-        console.log({audition_seed_data})
-      } catch (e) {
-        return console.log(e);
-      }
-    })()
-    // console.log({audition_seed_data})
+    // (async function() {
+    //   try {
+    //     audition_seed_data = await questionFetchQuestion();
+    //     braandlySeeder(audition_seed_data, Audition)
+    //     console.log({audition_seed_data})
+    //   } catch (e) {
+    //     return console.log(e);
+    //   }
+    // })()
+    // // console.log({audition_seed_data})
 
-    (async function() {
-      try {
-        let blog_seed_data = await blogFetch();
-        braandlySeeder(blog_seed_data, Blog)
-        // console.log({blog_seed_data})
-      } catch (e) {
-        return console.log(e);
-      }
-    })()
+    // (async function() {
+    //   try {
+    //     let blog_seed_data = await blogFetch();
+    //     braandlySeeder(blog_seed_data, Blog)
+    //     // console.log({blog_seed_data})
+    //   } catch (e) {
+    //     return console.log(e);
+    //   }
+    // })()
   })
   .catch((err) => console.log(err));
 
