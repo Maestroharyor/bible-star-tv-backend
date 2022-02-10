@@ -13,30 +13,30 @@ const Blog = require('./models/blogModel');
 const {blogFetch} = require('./data/blog_data');
 
 
-let audition_seed_data;
+// let audition_seed_data;
 
-(async function() {
-  try {
-    audition_seed_data = await questionFetchQuestion();
-    braandlySeeder(audition_seed_data, Audition)
-    console.log({audition_seed_data})
-  } catch (e) {
-    return console.log(e);
-  }
-})()
-console.log({audition_seed_data})
+// (async function() {
+//   try {
+//     audition_seed_data = await questionFetchQuestion();
+//     braandlySeeder(audition_seed_data, Audition)
+//     console.log({audition_seed_data})
+//   } catch (e) {
+//     return console.log(e);
+//   }
+// })()
+// console.log({audition_seed_data})
 
 
 
-(async function() {
-  try {
-    let blog_seed_data = await blogFetch();
-    braandlySeeder(blog_seed_data, Blog)
-    // console.log({blog_seed_data})
-  } catch (e) {
-    return console.log(e);
-  }
-})()
+// (async function() {
+//   try {
+//     let blog_seed_data = await blogFetch();
+//     braandlySeeder(blog_seed_data, Blog)
+//     // console.log({blog_seed_data})
+//   } catch (e) {
+//     return console.log(e);
+//   }
+// })()
 
 
 
