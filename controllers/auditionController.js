@@ -15,7 +15,7 @@ const get_all_auditions = async (req, res) => {
         const count = await Audition.count();
         const data = await Audition.find().limit(per_page).skip(startIndex);
         res.send(paginated_result(page, per_page, count, data))
-        next();
+        // next();
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
@@ -28,7 +28,7 @@ const audition = async (req, res) => {
             const data = await Audition.find({book_of_bible: req.query.book}).limit(2).skip(Math.floor(Math.random() * count));
             // res.send(paginated_result(page, per_page, count, data))
             res.send(data)
-            next();
+            // next();
         } catch (e) {
             res.status(500).json({ message: e.message });
         }
@@ -39,7 +39,7 @@ const audition = async (req, res) => {
             const data = await Audition.find().limit(2).skip(Math.floor(Math.random() * count));
             // res.send(paginated_result(page, per_page, count, data))
             res.send(data)
-            next();
+            // next();
         } catch (e) {
             res.status(500).json({ message: e.message });
         } 

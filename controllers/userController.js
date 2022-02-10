@@ -13,7 +13,7 @@ const get_users = async (req, res) => {
     const count = await User.count();
     const data = await User.find().limit(per_page).skip(startIndex);
     res.send(paginated_result(page, per_page, count, data));
-    next();
+    // next();
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

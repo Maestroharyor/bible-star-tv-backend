@@ -30,7 +30,7 @@ const get_all_funds = async(req, res) => {
             const count = await Fund.count();
             const data = await Fund.find().limit(per_page).skip(startIndex);
             res.send(paginated_result(page, per_page, count, data))
-            next();
+            // next();
         } catch (e) {
             res.status(500).json({ message: e.message });
         } 

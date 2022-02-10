@@ -13,7 +13,7 @@ const get_blogs = async (req, res) => {
         const count = await Blog.count();
         const query = await Blog.find().limit(per_page).skip(startIndex);
         res.send(paginated_result(page, per_page, count, query))
-        next();
+        // next();
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
