@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-var cors = require('cors');
+const cors = require('cors');
 // const axios = require('axios');
 const dotenv = require('dotenv/config');
 const routes = require('./routes/api');
@@ -45,7 +45,7 @@ const routes = require('./routes/api');
 const app = express();
 
 //Midddlewares
-app.use(cors()
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
