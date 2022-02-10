@@ -7,24 +7,25 @@ const routes = require('./routes/api');
 const {braandlySeeder} = require('./middlewares/seeding');
 const User = require('./models/userModel');
 const {user_seed_data} = require('./data/user_data');
+const {blog_seed_data} = require('./data/blog_data');
 const Audition = require('./models/auditionModel');
 const {questionFetchQuestion} = require('./data/audition_data');
 const Blog = require('./models/blogModel');
 const {blogFetch} = require('./data/blog_data');
 
 
-// let audition_seed_data;
+let audition_seed_data;
 
-// (async function() {
-//   try {
-//     audition_seed_data = await questionFetchQuestion();
-//     braandlySeeder(audition_seed_data, Audition)
-//     console.log({audition_seed_data})
-//   } catch (e) {
-//     return console.log(e);
-//   }
-// })()
-// console.log({audition_seed_data})
+(async function() {
+  try {
+    audition_seed_data = await questionFetchQuestion();
+    braandlySeeder(audition_seed_data, Audition)
+    console.log({audition_seed_data})
+  } catch (e) {
+    return console.log(e);
+  }
+})()
+console.log({audition_seed_data})
 
 
 
@@ -67,8 +68,9 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true})
   .then((result) => {
     console.log("Connected to db");
   
-    console.log({audition_seed_data})
-    braandlySeeder(audition_seed_data, Audition)
+    // console.log({audition_seed_data})
+    braandlySeeder(user_seed_data, Audition)
+    braandlySeeder(audition_seed_data, User)
   })
   .catch((err) => console.log(err));
 
