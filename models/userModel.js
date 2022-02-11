@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: [true, 'Please enter a username'],
+        unique: [true, "Username already exists"],
         lowercase: true
     },
     email: {
@@ -25,6 +26,12 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         unique: [true, "Email already exists"],
         validate: [isEmail, "Please Enter a Valid Email"]
+    },
+    gender: {
+        type: String,
+        required: [true, "Please enter an gender"],
+        lowercase: true,
+        enum: ["male", "female"]
     },
     password: {
         type: String,

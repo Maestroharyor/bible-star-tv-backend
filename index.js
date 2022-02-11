@@ -12,7 +12,8 @@ const { blog_seed_data } = require("./data/blog_data");
 const Audition = require("./models/auditionModel");
 const { questionFetchQuestion } = require("./data/audition_data");
 const Blog = require("./models/blogModel");
-const { blogFetch } = require("./data/blog_data");
+const blogFetch = require("./data/blog_data");
+
 
 
 
@@ -43,7 +44,7 @@ mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => {
     console.log("Connected to db");
-    let user_seed_data = createSeedData(1000);
+    // let user_seed_data = createSeedData(1000);
 
     // console.log({audition_seed_data})
     // console.log({user_seed_data})
@@ -65,7 +66,7 @@ mongoose
     // (async function() {
     //   try {
     //     let blog_seed_data = await blogFetch();
-    //     braandlySeeder(blog_seed_data, Blog)
+    //     braandlySeeder(blog_seed_data, Blog) 
     //     // console.log({blog_seed_data})
     //   } catch (e) {
     //     return console.log(e);
@@ -75,7 +76,7 @@ mongoose
   .catch((err) => console.log(err));
 
 //Starting server
-app.listen(process.env.port || 3050, () => {
+app.listen(process.env.port || 8000, () => {
   console.log("Now Listening for requests");
 });
 

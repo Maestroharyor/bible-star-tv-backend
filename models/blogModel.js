@@ -10,12 +10,16 @@ const blogSchema = new Schema(
     },
     excerpt: {
       type: String,
-      // required: [true, "Excerpt not added"],
+      required: [true, "Excerpt not added"],
+    },
+    slug: {
+      type: String,
+      required: [true, "URL not added"],
+      unique: [true, "Url already exits"],
     },
     category: {
       type: [String],
       required: [true, "Category Not Added"],
-      unique: [true, "Duplicate Category Added"]
     },
     featured_image: {
       type: String,
