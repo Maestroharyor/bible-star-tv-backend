@@ -104,6 +104,8 @@ const auth_signup = (req, res) => {
         lastname: response.lastname,
         username: response.username,
         email: response.email,
+        bio: response.bio ? response.bio : `I am ${response.firstname} ${response.lastname}`,
+        location: response.location ? response.location : "",
         user_role: response.user_role,
         my_stats:
           response.user_role === "contestant"
@@ -134,6 +136,8 @@ const auth_login = (req, res) => {
         lastname: response.lastname,
         username: response.username,
         email: response.email,
+        bio: response.bio ? response.bio : `I am ${response.firstname} ${response.lastname}`,
+        location: response.location ? response.location : "",
         user_role: response.user_role,
         my_stats:
           response.user_role === "contestant"

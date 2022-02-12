@@ -94,6 +94,7 @@ const get_single_funds = async(req, res) => {
 const add_funds = async (req, res) => {
     const tokenID = decodeToken(req.headers.authorization.substr(7));
     const user = await User.findById(tokenID)
+    // console.log({user})
     const {details, amount, type , category} = req.body;
     const userDets = {id: user._id, firstname: user.firstname, lastname: user.lastname, email: user.email}
     // console.log(userDets)
@@ -101,7 +102,19 @@ const add_funds = async (req, res) => {
     // console.log(body)
     Fund.create(body)
     .then(response => {
-        res.status(200).send({data: response, message: "Fund record Created Successfully"})
+        const my_stats = {
+            total_points: user.my_stats.total_points,
+            total_attempts: user.my_stats.total_attempta,
+            wallet_balance: user.my_stats.wallet_balance + Number(amount),
+            amount_spent: user.my_stats.amount_spent,
+            total_votes: user.my_stats.total_votes
+          };
+        return User.findByIdAndUpdate(tokenID, {my_stats}, {
+            useFindAndModify: false
+          });
+    })
+    .then( response2 => {
+        res.status(200).send({ message: "Fund record Created Successfully"});
     })
     .catch(err => {
         res.status(400).send(err)
