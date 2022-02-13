@@ -5,6 +5,7 @@ const authRouter = require('./auth/index');
 const auditionRouter = require('./audition/index');
 const statsRouter = require('./stats/index');
 const blogRouter = require('./blog/index');
+const announcementRouter = require('./announcements/index');
 const {tokenVerify} = require('../middlewares/tokenVerify');
 
 router.use('/auth', authRouter);
@@ -12,4 +13,5 @@ router.use('/users', userRouter);
 router.use('/blogs', blogRouter);
 router.use('/auditions', tokenVerify, auditionRouter);
 router.use('/stats', tokenVerify, statsRouter);
+router.use('/announcements', tokenVerify, announcementRouter);
 module.exports = router;
