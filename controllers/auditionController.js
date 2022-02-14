@@ -1,5 +1,6 @@
 const Audition = require('../models/auditionModel');
 const User = require('../models/userModel');
+const Fund = require("../models/fundsModel");
 const {filterObject} = require('../functions/utilities');
 const {paginated_result} = require('../middlewares/requestpaginate')
 const {decodeToken} = require('../middlewares/tokenVerify')
@@ -15,6 +16,18 @@ const get_all_auditions = async (req, res) => {
         const count = await Audition.count();
         const data = await Audition.find().limit(per_page).skip(startIndex);
         res.send(paginated_result(page, per_page, count, data))
+        // next();
+    } catch (e) {
+        res.status(500).json({ message: e.message });
+    }
+}
+
+const get_books_of_bible_audition = async (req, res) => {
+
+
+    try {
+        const data = await Audition.find().distinct("book_of_bible").exec();
+        res.send({data})
         // next();
     } catch (e) {
         res.status(500).json({ message: e.message });
@@ -50,7 +63,7 @@ const audition = async (req, res) => {
 
 const answer_audition = async (req, res) => {
     const tokenID = decodeToken(req.headers.authorization.substr(7));
-    if(req.body.id === undefined || req.body.answer === undefined){
+    if(req.body.id === undefined){
         res.status(400).json({error: {
             type:"no_data_sent",
             message:"No payload gotten for answering"
@@ -62,20 +75,25 @@ const answer_audition = async (req, res) => {
         User.findById(tokenID)
     ])
 
+    console.log({answer})
+    console.log(audition)
     console.log(user)
 
     let {total_points, total_attempts, wallet_balance, amount_spent} = user.my_stats
     let {auditioned_questions} = user
 
-    if(wallet_balance < 500){
-        res.status(400).json({error: {
-        type:"insufficient_funds",
-        message:"You don't have enough balance. Please recharge"
-    }})
-    }
+    console.log({total_points, total_attempts, wallet_balance, amount_spent})
+
+    // if(wallet_balance < 500){
+    //     res.status(400).json({error: {
+    //     type:"insufficient_funds",
+    //     message:"You don't have enough balance. Please recharge"
+    // }})
+    // }
 
     
-    if(audition.correct_answer === answer){
+    if(audition.correct_answer == answer){
+        console.log("Correct")
         // my_stats: {
         //     total_points: 0,
         //     total_attempts: 0,
@@ -85,10 +103,10 @@ const answer_audition = async (req, res) => {
         //   }
         
         let newStats = {
-            wallet_balance: wallet_balance-=250,
-            amount_spent: amount_spent+=250,
+            wallet_balance: wallet_balance,
+            amount_spent: amount_spent,
             total_points: total_points+=10,
-            total_attempts:  total_attempts+=1
+            total_attempts:  total_attempts ? total_attempts+=1 : 1
         }
 
         let updatedAuditions;
@@ -107,12 +125,13 @@ const answer_audition = async (req, res) => {
             res.status(200).json({status: "right", message: "You got it right"})
         })
         .catch(err => {
+            console.log(err)
             res.status(400).send(err)
         })
     } else{
         let newStats = {
-            wallet_balance: wallet_balance-=250,
-            amount_spent: amount_spent+=250,
+            wallet_balance: wallet_balance,
+            amount_spent: amount_spent,
             total_points,
             total_attempts:  total_attempts+=1
         }
@@ -134,6 +153,50 @@ const answer_audition = async (req, res) => {
     }
     // console.log({audition}, {user})
     // res.end()
+
+}
+
+const start_audition = async (req, res) => {
+    const tokenID = decodeToken(req.headers.authorization.substr(7));
+
+    const user = await User.findById(tokenID)
+    
+
+
+    let {total_points, total_attempts, wallet_balance, amount_spent} = user.my_stats
+
+    if(wallet_balance < 500){
+        res.status(400).json({error: {
+        type:"insufficient_funds",
+        message:"You don't have enough balance. Please recharge"
+    }})
+    }
+
+        let newStats = {
+            wallet_balance: wallet_balance-=500,
+            amount_spent: amount_spent+=500,
+            total_points: total_points,
+            total_attempts:  total_attempts
+        }
+
+        const userDets = {id: user._id, firstname: user.firstname, lastname: user.lastname, email: user.email}
+        
+        User.findByIdAndUpdate(tokenID, {my_stats: newStats} , {useFindAndModify: false})
+        .then(response => {
+            console.log("500 naira deducted")
+            
+            // const {details, amount, type , category} = req.body;
+
+            return Fund.create({details:"500 naira deducted for audition", amount:500, type:"subtraction", category:"audition", created_by: userDets})
+
+        })
+        .then(response2 => {
+            res.status(200).json({status: "deducted", message: "500 naira deducted"})
+
+        })
+        .catch(err => {
+            res.status(400).send(err)
+        })
 
 }
 
@@ -218,8 +281,10 @@ const delete_audition = async (req, res) => {
 
 module.exports = {
     get_all_auditions,
+    get_books_of_bible_audition,
     audition,
     add_audition,
+    start_audition,
     answer_audition,
     get_single_audition,
     update_audition,

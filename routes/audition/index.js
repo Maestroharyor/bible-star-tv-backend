@@ -8,6 +8,10 @@ router.get("/", auditionController.get_all_auditions)
 
 router.get("/questions", auditionController.audition)
 
+router.get("/books", auditionController.get_books_of_bible_audition)
+
+router.post("/start", auditionController.start_audition)
+
 router.post("/questions", auditionController.add_audition)
 
 router.post("/answer/:id", auditionController.answer_audition)

@@ -104,7 +104,7 @@ const add_funds = async (req, res) => {
     .then(response => {
         const my_stats = {
             total_points: user.my_stats.total_points,
-            total_attempts: user.my_stats.total_attempta,
+            total_attempts: user.my_stats.total_attempts,
             wallet_balance: user.my_stats.wallet_balance + Number(amount),
             amount_spent: user.my_stats.amount_spent,
             total_votes: user.my_stats.total_votes
