@@ -6,6 +6,8 @@ const {tokenVerify} = require('../../middlewares/tokenVerify');
 
 router.get("/", userController.get_users)
 
+router.get("/batch/:id", userController.get_batch_users)
+
 router.get("/top", userController.get_top_users)
 
 router.get('/:id', userController.get_single_user)

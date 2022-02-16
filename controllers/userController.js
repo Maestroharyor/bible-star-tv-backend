@@ -37,6 +37,31 @@ const get_users = async (req, res) => {
   }
 };
 
+const get_batch_users = async (req, res) => {
+  const page = req.query.page ? parseInt(req.query.page) : 1;
+  const per_page = req.query.per_page ? parseInt(req.query.per_page) : 12;
+  const startIndex = (page - 1) * per_page;
+
+    try {
+      // const user = await User.findById(req.query.id)
+      // console.log(user)
+      const count = await User.count({ "user_role": "contestant", "batch":req.params.id });
+      const data = await User.find({ "user_role": "contestant", "batch":req.params.id })
+        .limit(per_page)
+        .skip(startIndex);
+      if (count === 0) {
+        res.send({ message: `No User from Batch ${req.params.id} found`, data });
+      } else{
+        res.send(paginated_result(page, per_page, count, data));
+      }
+      
+      // next();
+    } catch (e) {
+      console.log(e)
+      res.status(500).json({ error: "error", message: e.message });
+    }
+};
+
 
 const get_top_users = async (req, res) => {
   const page = req.query.page ? parseInt(req.query.page) : 1;
@@ -60,9 +85,26 @@ const get_single_user = (req, res) => {
       if (Object.keys.length === 0) {
         res.status(404).send({ error: "User Not Found" });
       }
+      let userData = {
+        id: response._id,
+        firstname: response.firstname,
+        gender: response.gender,
+        lastname: response.lastname,
+        username: response.username,
+        email: response.email,
+        bio: response.bio ? response.bio : `I am ${response.firstname} ${response.lastname}`,
+        location: response.location ? response.location : "",
+        user_role: response.user_role,
+        my_stats:
+          response.user_role === "contestant"
+            ? response.my_stats
+            : response.subscriber_stats,
+        user_role: response.user_role,
+        // token
+      }
       res
         .status(200)
-        .send(filterObject(JSON.parse(JSON.stringify(response)), "password"));
+        .send(filterObject(JSON.parse(JSON.stringify(userData)), "password"));
     })
     .catch((error) => {
       res.status(404).send({ error, message: "User Not Found" });
@@ -158,6 +200,7 @@ const delete_user = async (req, res) => {
 
 module.exports = {
   get_users,
+  get_batch_users,
   get_top_users,
   get_single_user,
   update_user,

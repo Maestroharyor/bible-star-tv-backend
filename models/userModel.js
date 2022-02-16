@@ -46,6 +46,7 @@ const userSchema = new mongoose.Schema({
     batch: {
         type: String,
         enum: ['A', 'B', 'C', 'D'],
+        // lowercase: true
         // required: [true, 'User Role not set']
     },
     location: {
