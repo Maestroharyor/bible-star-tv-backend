@@ -38,8 +38,8 @@ app.use("*", (req, res) => {
 });
 
 // database connection
-// const dbURI = "mongodb+srv://Fovero:Fovero21biblestar@bible-star-tv.kcjzu.mongodb.net/biblestars?retryWrites=true&w=majority";
-const dbURI = process.env.DB;
+const dbURI = "mongodb+srv://Fovero:Fovero21biblestar@bible-star-tv.kcjzu.mongodb.net/biblestars?retryWrites=true&w=majority";
+// const dbURI = process.env.DB;
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => {
