@@ -10,16 +10,21 @@ const User = require("./models/userModel");
 const createSeedData = require("./data/user_data");
 const { blog_seed_data } = require("./data/blog_data");
 const Audition = require("./models/auditionModel");
-const { questionFetchQuestion } = require("./data/audition_data");
+const { questionFetchQuestion } = require("./data/audition_demo_data");
+const AuditionData = require('./data/audition_data.json')
 const Blog = require("./models/blogModel");
 const blogFetch = require("./data/blog_data");
-
-
-
-
-
+const {Seeder} = require('express-seeder')
 
 const app = express();
+
+const audition_data = AuditionData
+audition_data.map(data => {
+  data.answers = data.answers.split(',')
+  return data;
+})
+
+// console.log(audition_data)
 
 //Midddlewares
 app.use(cors());
@@ -44,6 +49,7 @@ mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => {
     console.log("Connected to db");
+    // Seeder(audition_data, Audition)
     // let user_seed_data = createSeedData(1000);
 
     // console.log({audition_seed_data})
@@ -55,8 +61,8 @@ mongoose
     // (async function() {
     //   try {
     //     audition_seed_data = await questionFetchQuestion();
-    //     braandlySeeder(audition_seed_data, Audition)
-    //     console.log({audition_seed_data})
+    //     braandlySeeder(audition_data, Audition)
+    //     // console.log({audition_seed_data})
     //   } catch (e) {
     //     return console.log(e);
     //   }

@@ -3,6 +3,7 @@ const seeds = []
 Object.keys(data).map(indData => {
   seeds.push(new model(data[indData]))
 })
+
 seeds.forEach(seed => {
   model.create(seed)
   .then(response => {
