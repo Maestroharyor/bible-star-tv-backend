@@ -118,7 +118,7 @@ const answer_audition = async (req, res) => {
       wallet_balance: wallet_balance,
       amount_spent: amount_spent,
       total_points: (total_points += 10),
-      total_attempts: total_attempts ? (total_attempts += 1) : 1
+      // total_attempts: total_attempts ? (total_attempts += 1) : 1
     };
 
     let updatedAuditions;
@@ -192,10 +192,10 @@ const start_audition = async (req, res) => {
   }
 
   let newStats = {
-    wallet_balance: (wallet_balance -= 500),
-    amount_spent: (amount_spent += 500),
+    wallet_balance: (wallet_balance -= 250),
+    amount_spent: (amount_spent += 250),
     total_points: total_points,
-    total_attempts: total_attempts
+    total_attempts: total_attempts ? (total_attempts += 1) : 1
   };
 
   const userDets = {
