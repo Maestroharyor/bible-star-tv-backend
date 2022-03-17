@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const methodOverride = require("method-override");
 const User = require("../models/userModel");
 const { filterObject } = require("../functions/utilities");
 const { paginated_result } = require("../middlewares/requestpaginate");
@@ -158,6 +159,10 @@ const update_user = async (req, res) => {
   }
 };
 
+// const upload_profile_picture = async (req, res) => {
+//   res.json({file: req.file})
+// }
+
 const delete_user = async (req, res) => {
   const tokenID = decodeToken(req.headers.authorization.substr(7));
   if (tokenID === undefined) {
@@ -204,5 +209,6 @@ module.exports = {
   get_top_users,
   get_single_user,
   update_user,
+  // upload_profile_picture,
   delete_user
 };
