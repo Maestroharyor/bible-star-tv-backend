@@ -11,7 +11,7 @@ const blogSchema = new Schema(
     },
     excerpt: {
       type: String,
-      required: [true, "Excerpt not added"],
+      // required: [true, "Excerpt not added"],
     },
     slug: {
       type: String,
@@ -23,7 +23,9 @@ const blogSchema = new Schema(
       required: [true, "Category Not Added"],
     },
     featured_image: {
-      type: String,
+      url: String,
+      thumbnail: String,
+      fileID: String
     },
     body: {
       type: String,

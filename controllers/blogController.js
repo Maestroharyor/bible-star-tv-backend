@@ -60,6 +60,7 @@ const create_blog = async (req, res) => {
     const user = await User.findById(tokenID)
     const userDets = {id: user._id, firstname: user.firstname, lastname: user.lastname, email: user.email}
     // console.log(user)
+    req.body.slug = req.body.title.split(" ").join("-")
     const body = {...req.body, created_by: userDets}
     Blog.create(body)
     .then(response => {
