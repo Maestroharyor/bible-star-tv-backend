@@ -60,13 +60,15 @@ const create_blog = async (req, res) => {
     const user = await User.findById(tokenID)
     const userDets = {id: user._id, firstname: user.firstname, lastname: user.lastname, email: user.email}
     // console.log(user)
-    req.body.slug = req.body.title.split(" ").join("-")
+    req.body.slug = req.body.title.toLowerCase().split(" ").join("-");
     const body = {...req.body, created_by: userDets}
     Blog.create(body)
     .then(response => {
         res.status(200).send({data: response, message: "Blog post created Successfully"})
     })
     .catch(err => {
+        console.log(err)
+        err.code === 11000 ? res.status(404).send({message: `${Object.keys(err.keyValue)[0] === "slug" ? "Post Title" : Object.keys(err.keyValue)[0]} already exists`}) :
         res.status(400).send(err)
     })
 
@@ -97,8 +99,10 @@ const update_blog = async (req, res) => {
 }
 
 const delete_blog = async (req, res) => {
-    Blog.findByIdAndDelete(req.body.id).exec()
+    // console.log(req.body.id)
+    Blog.findByIdAndDelete(req.params.id)
     .then(response => {
+        // console.log(response)
         res.send({message:"Post Deleted Successfully", data: response})
     })
     .catch(error => {
