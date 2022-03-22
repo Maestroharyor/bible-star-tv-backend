@@ -8,7 +8,7 @@ router.get("/", blogController.get_blogs)
 
 router.get("/search", blogController.search_blogs)
 
-router.get('/:id', blogController.get_single_blog)
+router.get('/:slug', blogController.get_single_blog)
 
 router.post("/", tokenVerify, blogController.create_blog)
 

@@ -42,7 +42,7 @@ const search_blogs = async (req, res) => {
 }
 
 const get_single_blog = async (req, res) => {
-    Blog.findById(req.params.id)
+    Blog.find({slug: req.params.slug})
     .then((response) => {
       if (Object.keys.length === 0) {
         res.status(404).send({ error: "Post Not Found" });
