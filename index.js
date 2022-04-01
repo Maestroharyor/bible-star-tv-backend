@@ -8,12 +8,12 @@ const routes = require("./routes/api");
 // const User = require("./models/userModel");
 // const createSeedData = require("./data/user_data");
 // const { blog_seed_data } = require("./data/blog_data");
-// const Audition = require("./models/auditionModel");
+const Audition = require("./models/auditionModel");
 // const { questionFetchQuestion } = require("./data/audition_demo_data");
-// const AuditionData = require("./data/audition_data.json");
+const AuditionData = require("./data/audition_data2.json");
 // const Blog = require("./models/blogModel");
 // const blogFetch = require("./data/blog_data");
-// const { Seeder } = require("express-seeder");
+const { Seeder } = require("express-seeder");
 
 const app = express();
 
@@ -24,6 +24,7 @@ const app = express();
 // });
 
 // console.log(audition_data)
+// console.log(audition_data.length)
 
 
 
@@ -51,6 +52,7 @@ mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => {
     console.log("Connected to db");
+    // Seeder(audition_data, Audition)
 
   })
   .catch((err) => console.log(err));

@@ -52,11 +52,13 @@ const get_single_vote = async (req, res) => {
 };
 
 const create_vote = async (req, res) => {
-  const tokenID = decodeToken(req.headers.authorization.substr(7));
-  const [user, votedUser] = await Promise.all([
-    User.findById(tokenID),
+  const subscriberTokenID = decodeToken(req.headers.authorization.substr(7));
+  const [userReq, contestantReq] = await Promise.allSettled([
+    User.findById(subscriberTokenID),
     User.findById(req.params.userID)
   ]);
+  const user = userReq.value;
+  const contestant = contestantReq.value;
 
   if (user.user_role !== "subscriber") {
     res.status(400).send({
@@ -72,23 +74,60 @@ const create_vote = async (req, res) => {
     };
 
     const voted_for = {
-      id: votedUser._id,
-      firstname: votedUser.firstname,
-      lastname: votedUser.lastname,
-      email: votedUser.email
+      id: contestant._id,
+      firstname: contestant.firstname,
+      lastname: contestant.lastname,
+      email: contestant.email
     };
-    // console.log(user)
 
-    const body = { ...req.body, voted_for, created_by: userDets };
-    Vote.create(body)
-      .then((response) => {
-        res
-          .status(200)
-          .send({ data: response, message: "Vote created Successfully" });
-      })
-      .catch((err) => {
-        res.status(400).send(err);
-      });
+    let newSubscriberStats = {
+      wallet_balance: (user.subscriber_stats.wallet_balance -= 100),
+      amount_spent: (user.subscriber_stats.amount_spent += 100),
+      total_votes: user.subscriber_stats.total_votes ? (user.subscriber_stats.total_votes += 1) : 1
+    };
+
+    let newContestantStats = {
+      wallet_balance: contestant.my_stats.wallet_balance,
+      amount_spent: contestant.my_stats.amount_spent,
+      total_points: contestant.my_stats.total_points ? (contestant.my_stats.total_points += 10) : 10,
+      total_attempts: contestant.my_stats.total_attempts
+    };
+
+    // res.send({newSubscriberStats, newContestantStats})
+    const voteBody = { ...req.body, voted_for, created_by: userDets };
+    const [updateUser, updateContestant, createVote] = await Promise.allSettled([
+      User.findByIdAndUpdate(
+        subscriberTokenID,
+        { subscriber_stats: newSubscriberStats },
+        { new: true }
+      ),
+      User.findByIdAndUpdate(
+        req.params.userID,
+        { my_stats: newContestantStats },
+        { new: true }
+      ),
+      Vote.create(voteBody)
+    ])
+
+    console.log({updateUser, updateContestant, createVote})
+    if(updateUser.status === "fulfilled" && updateContestant.status === "fulfilled" && createVote.status === "fulfilled"){
+res.status(200).send({ data: createVote, message: "Vote created Successfully" });
+    } else{
+      res.status(400).send({message: "Voting failed", errors: {updateUser, updateContestant, createVote}})
+    }
+    
+
+
+
+    // Vote.create(body)
+    //   .then((response) => {
+    //     res
+    //       .status(200)
+    //       .send({ data: response, message: "Vote created Successfully" });
+    //   })
+    //   .catch((err) => {
+    //     res.status(400).send(err);
+    //   });
   }
 };
 
@@ -104,7 +143,7 @@ const update_vote = async (req, res) => {
 
   Vote.findByIdAndUpdate(req.params.id, body, { useFindAndModify: false })
     .then((response) => {
-      res.status(200).send({ success: "Post Successfully Updated" });
+      res.status(200).send({ success: "Vote Successfully Updated" });
     })
     .catch((err) => {
       res.status(404).send(err);
