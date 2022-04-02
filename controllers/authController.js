@@ -44,7 +44,7 @@ const handleError = (err) => {
 };
 
 const auth_signup = (req, res) => {
-  const { firstname, lastname, username, email, gender, password } = req.body;
+  const { firstname, lastname, username, email, gender, password, batch } = req.body;
   console.log(req.body);
   const current_date = moment().format("YYYY-MM-DD");
   let my_stats;
@@ -70,6 +70,7 @@ const auth_signup = (req, res) => {
       username,
       email,
       gender,
+      batch,
       password,
       user_role,
       my_stats,
