@@ -51,7 +51,7 @@ const get_batch_users = async (req, res) => {
         .limit(per_page)
         .skip(startIndex);
       if (count === 0) {
-        res.send({ message: `No User from Batch ${req.params.id} found`, data });
+        res.send({ message: `No User from Batch ${req.params.id} found`, query: data });
       } else{
         res.send(paginated_result(page, per_page, count, data));
       }
