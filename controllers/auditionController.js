@@ -117,7 +117,7 @@ const answer_audition = async (req, res) => {
     let newStats = {
       wallet_balance: wallet_balance,
       amount_spent: amount_spent,
-      total_points: (total_points += 10),
+      total_points: (total_points += 1),
       // total_attempts: total_attempts ? (total_attempts += 1) : 1
     };
 
@@ -211,13 +211,13 @@ const start_audition = async (req, res) => {
     { useFindAndModify: false }
   )
     .then((response) => {
-      console.log("500 naira deducted");
+      console.log("250 naira deducted");
 
       // const {details, amount, type , category} = req.body;
 
       return Fund.create({
-        details: "500 naira deducted for audition",
-        amount: 500,
+        details: "250 naira deducted for audition",
+        amount: 250,
         type: "subtraction",
         category: "audition",
         created_by: userDets
@@ -226,7 +226,7 @@ const start_audition = async (req, res) => {
     .then((response2) => {
       res
         .status(200)
-        .json({ status: "deducted", message: "500 naira deducted" });
+        .json({ status: "deducted", message: "250 naira deducted" });
     })
     .catch((err) => {
       res.status(400).send(err);
