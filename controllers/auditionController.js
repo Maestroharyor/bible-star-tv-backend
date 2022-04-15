@@ -104,7 +104,7 @@ const answer_audition = async (req, res) => {
   // }})
   // }
 
-  if (audition.correct_answer == answer) {
+  if (audition.correct_answer.toLowerCase() == answer.toLowerCase()) {
     console.log("Correct");
     // my_stats: {
     //     total_points: 0,
