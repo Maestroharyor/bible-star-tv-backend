@@ -104,7 +104,7 @@ const answer_audition = async (req, res) => {
   // }})
   // }
 
-  if (audition.correct_answer == answer) {
+  if (audition.correct_answer === answer) {
     console.log("Correct");
     // my_stats: {
     //     total_points: 0,
@@ -118,7 +118,7 @@ const answer_audition = async (req, res) => {
       wallet_balance: wallet_balance,
       amount_spent: amount_spent,
       total_points: (total_points += 1),
-      // total_attempts: total_attempts ? (total_attempts += 1) : 1
+      total_attempts: total_attempts ? (total_attempts += 1) : 1
     };
 
     let updatedAuditions;
@@ -148,7 +148,7 @@ const answer_audition = async (req, res) => {
       wallet_balance: wallet_balance,
       amount_spent: amount_spent,
       total_points,
-      total_attempts: (total_attempts += 1)
+      total_attempts: total_attempts ? (total_attempts += 1) : 1
     };
     let updatedAuditions;
     if (auditioned_questions === undefined) {

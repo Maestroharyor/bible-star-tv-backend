@@ -11,15 +11,18 @@ const auditionSchema = new mongoose.Schema({
     book_of_bible: {
         type: String,
         required: [true, 'Book of the bible not set'],
+        lowercase: true
         // unique: [true, "Book of the bible already exists"],
     },
     answers: {
         type: [String],
-        required: [true, 'Answers not set']
+        required: [true, 'Answers not set'],
+        lowercase: true
     },
     correct_answer: {
         type: String,
-        required: [true, 'Correct Answer not set']
+        required: [true, 'Correct Answer not set'],
+        lowercase: true,
     },
     created_by:  { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, {timestamps: true})

@@ -10,7 +10,7 @@ const routes = require("./routes/api");
 // const { blog_seed_data } = require("./data/blog_data");
 const Audition = require("./models/auditionModel");
 // const { questionFetchQuestion } = require("./data/audition_demo_data");
-const AuditionData = require("./data/audition_data2.json");
+const AuditionData = require("./data/audition_data.json");
 // const Blog = require("./models/blogModel");
 // const blogFetch = require("./data/blog_data");
 const { Seeder } = require("express-seeder");
@@ -18,15 +18,20 @@ const { Seeder } = require("express-seeder");
 const app = express();
 
 // const audition_data = AuditionData;
-// audition_data.map((data) => {
-//   data.answers = data.answers.split(",");
-//   return data;
-// });
+// audition_data
+//   .map(arr => {
+//     arr.correct_answer = arr.correct_answer.toLowerCase();
+//     arr.answers = arr.answers.toLowerCase();
+//     arr.book_of_bible = arr.book_of_bible.toLowerCase();
+//     return arr;
+//   })
+//   .map(data => {
+//     data.answers = data.answers.split(",");
+//     return data;
+//   });
 
-// console.log(audition_data)
-// console.log(audition_data.length)
-
-
+// console.log(audition_data);
+// console.log(audition_data.length);
 
 //Midddlewares
 app.use(cors());
@@ -50,12 +55,11 @@ const dbURI =
 // const dbURI = process.env.DB;
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then((result) => {
+  .then(result => {
     console.log("Connected to db");
     // Seeder(audition_data, Audition)
-
   })
-  .catch((err) => console.log(err));
+  .catch(err => console.log(err));
 
 //Starting server
 app.listen(process.env.port || 8000, () => {
