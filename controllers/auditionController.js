@@ -182,7 +182,7 @@ const start_audition = async (req, res) => {
   let { total_points, total_attempts, wallet_balance, amount_spent } =
     user.my_stats;
 
-  if (wallet_balance < 500) {
+  if (wallet_balance < 250) {
     res.status(400).json({
       error: {
         type: "insufficient_funds",
