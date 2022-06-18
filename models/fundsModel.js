@@ -16,7 +16,7 @@ const fundsSchema =  new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ["audition", "voting"]
+        enum: ["audition", "voting", "homeplay"]
     },
     created_by: {
         id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
