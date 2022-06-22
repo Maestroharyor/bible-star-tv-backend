@@ -81,7 +81,7 @@ const answer_homeplay = async (req, res) => {
   }
 
   Fund.create({
-    details: "100 naira deducted for audition",
+    details: "100 naira deducted for homeplay",
     amount: 100,
     type: "subtraction",
     category: "homeplay",
@@ -100,7 +100,7 @@ const answer_homeplay = async (req, res) => {
 
   console.log({ wallet_balance, amount_spent });
 
-  if (homeplayquestion.correct_answer.includes(answer.toLowerCase())) {
+  if (homeplayquestion.correct_answers.includes(answer.toLowerCase())) {
     console.log("Correct");
 
     let newStats = {
@@ -162,12 +162,9 @@ const add_homeplay = async (req, res) => {
   const user = await User.findById(tokenID);
 
   if (user.user_role === "superadmin" || user.user_role === "admin") {
-    const { question, answers, book_of_bible, correct_answer } = req.body;
+    const { question, wrong_answers, correct_answers } = req.body;
     HomePlay.create({
-      question,
-      answers,
-      book_of_bible,
-      correct_answer,
+      question, wrong_answers, correct_answers,
       created_by: user._id,
     })
       .then((response) => {

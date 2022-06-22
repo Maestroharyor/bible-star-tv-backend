@@ -8,9 +8,9 @@ const HomePlaySchema = new mongoose.Schema({
         unique: [true, "Question already exists"],
         lowercase: true,
     },
-    answers: {
+    wrong_answers: {
         type: [String],
-        required: [true, 'Answers not set'],
+        required: [true, 'Wrong Answers not set'],
         lowercase: true
     },
     correct_answers: {
