@@ -8,6 +8,7 @@ const blogRouter = require('./blog/index');
 const uploadRouter = require('./uploads/index');
 const announcementRouter = require('./announcements/index');
 const subscriberRouter = require('./subscribers/index');
+const homeplayRouter = require('./homeplays/index');
 const voteRouter = require('./votes/index');
 const {tokenVerify} = require('../middlewares/tokenVerify');
 
@@ -19,5 +20,6 @@ router.use('/auditions', tokenVerify, auditionRouter);
 router.use('/stats', tokenVerify, statsRouter);
 router.use('/announcements', tokenVerify, announcementRouter);
 router.use('/subscribers', subscriberRouter);
+router.use('/homeplays', homeplayRouter);
 router.use('/votes', tokenVerify, voteRouter);
 module.exports = router;
