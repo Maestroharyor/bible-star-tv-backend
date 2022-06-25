@@ -14,7 +14,7 @@ const subscriberSchema = new mongoose.Schema({
         lowercase: true
     },
     phone_number: {
-        type: Number,
+        type: String,
         required: [true, "Please enter phone number"],
     }
 }, {timestamps: true})
