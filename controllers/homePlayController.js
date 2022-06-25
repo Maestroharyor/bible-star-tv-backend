@@ -186,6 +186,7 @@ const add_homeplay = async (req, res) => {
 };
 
 const update_homeplay = async (req, res) => {
+  // console.log("Body sent", req.body)
   const tokenID = decodeToken(req.headers.authorization.substr(7));
   const user = await User.findById(tokenID);
   console.log(user);
