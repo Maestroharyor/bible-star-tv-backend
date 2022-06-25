@@ -13,12 +13,9 @@ const subscriberSchema = new mongoose.Schema({
         type: String,
         lowercase: true
     },
-    email: {
-        type: String,
-        required: [true, "Please enter an email"],
-        lowercase: true,
-        unique: [true, "Email already exists"],
-        validate: [isEmail, "Please Enter a Valid Email"]
+    phone_number: {
+        type: Number,
+        required: [true, "Please enter phone number"],
     }
 }, {timestamps: true})
 
