@@ -45,7 +45,7 @@ module.exports.add_subscriber = async (req, res) => {
   if (req.body.name && req.body.phone_number) {
     Subscriber.create(req.body)
       .then((response) => {
-        res.status(201).json(message: "Successfull", response);
+        res.status(201).json({message: "Successfull", response});
       })
       .catch((error) => {
         res.status(400).json({ error: error.message });
