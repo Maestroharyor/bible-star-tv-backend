@@ -42,16 +42,16 @@ module.exports.get_subscribers = async (req, res) => {
 };
 
 module.exports.add_subscriber = async (req, res) => {
-  if (req.body.name && req.body.email) {
+  if (req.body.name && req.body.phone_number) {
     Subscriber.create(req.body)
       .then((response) => {
-        res.status(201).json(response);
+        res.status(201).json(message: "Successfull", response);
       })
       .catch((error) => {
         res.status(400).json({ error: error.message });
       });
   } else {
-    res.status(400).send({ error: "Please enter all fields" });
+    res.status(400).send({ message: "Please enter all fields" });
   }
 };
 
